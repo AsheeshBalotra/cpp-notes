@@ -9,8 +9,8 @@ Revision notes on C++ and the STL for data structures and algorithms interviews.
 | [`CplusNotes.md`](CplusNotes.md)       | 25 longer sections: C++ basics, iterators, binary search, trees, DP, sorting, heaps, BFS, graphs        |
 | [`Notes_strings.md`](Notes_strings.md) | ASCII and `char` arithmetic, `stoi`, `to_string`, `substr`, `find`, `erase`, case helpers, number bases |
 | [`Notes_bits.md`](Notes_bits.md)       | bit operators, precedence, single-bit operations, tricks, XOR problems, bitmask subsets, binary         |
-| [`Notes_vectors.md`](Notes_vectors.md) | reverse iterators (`rbegin` / `rend`), `swap` with references vs copies                                 |
-| [`Notes_maps.md`](Notes_maps.md)       | `unordered_map` and `map`: key checks, cost of each operation, insert / erase, iterators, sorted keys   |
+| [`Notes_vectors.md`](Notes_vectors.md) | reverse iterators (`rbegin` / `rend`), `swap` with references vs copies, iterator invalidation          |
+| [`Notes_maps.md`](Notes_maps.md)       | `unordered_map` and `map`: key checks, cost, key types, insert / erase, iterators, sorted keys          |
 | [`Notes_heap.md`](Notes_heap.md)       | `priority_queue`: how a heap works, complexity, syntax, top K, heap vs `set`                            |
 | [`Notes_math.md`](Notes_math.md)       | modulo: negative remainders and `%` formulas                                                            |
 
@@ -33,5 +33,5 @@ Many sections include the common bugs for that topic and how to fix them.
 
 - Code assumes C++20 and `using namespace std;`.
 - Problem numbers, such as 169 Majority Element, are LeetCode problem numbers.
-- Warnings sit next to the operation they belong to, as **Trap:** bullets. `Notes_bits.md` and `Notes_heap.md` collect theirs in a Traps section instead.
-- Lines starting with `TODO:` mark topics still to be written up.
+- Warnings sit next to the operation they belong to, as **Trap:** bullets, with a section's main warning in a callout box. `Notes_bits.md` and `Notes_heap.md` collect theirs in a Traps section instead.
+- Lines starting with `> TODO` mark topics still to be written up.

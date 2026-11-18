@@ -223,7 +223,7 @@ a ^= b;  b ^= a;  a ^= b;
 a = 3, b = 5      -> a = 5, b = 3
 ```
 
-> TODO: Expand — what the XOR swap does when `a` and `b` are the same variable, for example `v[i]` and `v[j]` with `i == j`.
+- `a` and `b` must be two different variables: see "XOR swap on one variable" in section 7.
 
 ---
 
@@ -263,6 +263,7 @@ The classic precedence bug:
 - **Shift count:** `k` must be less than the bit width (32 for an `int`). Shifting by the width of the type or more (`1 << 32` on an `int`) is undefined.
 - **Signed numbers:** do not left-shift negative numbers, and remember that `>>` on a negative number rounds down (see `>>` in section 1). Use `unsigned` types for bit work.
 - **Negative `n` in base 2:** `n % 2` is not `n & 1`, and `n / 2` is not `n >> 1`. `-3 % 2` is `-1` but `-3 & 1` is `1`, and `-3 / 2` is `-1` but `-3 >> 1` is `-2`. The swaps in section 8 hold only for `n >= 0`.
+- **XOR swap on one variable:** if `a` and `b` are the same variable, for example `v[i]` and `v[j]` with `i == j`, the first step `a ^= b` is `x ^ x`, which is 0, and the value is lost. With `v = {7, 9}`, XOR-swapping `v[0]` with `v[0]` leaves `v[0] = 0`. Two different variables with the same value are fine: `a = 5, b = 5` stays `5, 5`. Check `i != j` first, or use `std::swap`.
 
 ---
 

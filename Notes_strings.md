@@ -16,6 +16,7 @@ ASCII (American Standard Code for Information Interchange) gives each character 
 
 - Order is digits, then uppercase, then lowercase.
 - `'a' - 'A'` is 32.
+- ASCII has 128 characters, numbered 0 to 127. So `vector<int> seen(128)` has one slot for every ASCII character, indexed by the character itself: `seen[s[i]]`.
 
 ### Why 32 works
 
@@ -122,6 +123,7 @@ for (char ch : to_string(1234)) sum += ch - '0';   // sum = 10
 s = "Hello, World!"
 
 s.substr(7, 5)          -> "World"
+s.substr(7, 1)          -> "W"      (the count starts at s[7] itself)
 s.substr(7)             -> "World!"
 s.substr(0, 5)          -> "Hello"
 s.substr(s.size() - 3)  -> "ld!"
@@ -131,6 +133,9 @@ s.substr(s.size() + 1)  -> throws out_of_range
 s.substr(i, j - i + 1)  -> index i to j inclusive (i = 7, j = 11 gives "World")
 ```
 
+> [!WARNING]
+> `len` counts `s[i]` itself: `s.substr(i, len)` is `s[i .. i+len-1]`. So `s.substr(i, 2)` is `s[i]` and `s[i+1]`, two characters, not `s[i]` plus two more. The end `i + len` is one past the last character taken, so a piece fits when `i + len <= s.size()`, with `<=`, not `<`. I got this wrong in 139.
+
 Split at a delimiter: find where the separator is, then cut before it and after it.
 ```
 p = "name=Ada",  eq = p.find('=')
@@ -138,7 +143,14 @@ p.substr(0, eq)         -> "name"
 p.substr(eq + 1)        -> "Ada"
 ```
 
-> TODO: Expand — what the split does when the delimiter is missing (`find` returns `npos`).
+When the delimiter is missing, `find` returns `string::npos`, and both halves come out as the whole string:
+```
+p = "nameAda",  eq = p.find('=')   -> string::npos
+p.substr(0, eq)                    -> "nameAda"    (a length past the end means "to the end")
+p.substr(eq + 1)                   -> "nameAda"    (npos + 1 wraps round to 0)
+```
+
+- **Trap:** no error tells you the split failed. Check `if (eq == string::npos)` before you cut.
 
 ---
 
@@ -193,7 +205,26 @@ s.erase()                           -> ""
 s.erase(s.size() + 1)               -> throws out_of_range
 ```
 
-> TODO: Expand — the time cost of one `erase` call, and what it costs to call `erase` inside a loop.
+One `erase` shifts every character after the removed part to the left, so it costs O(n). Erasing at the very end is cheap, because nothing follows.
+
+Calling `erase` inside a loop shifts the rest of the string every time, which makes the loop O(n²). Removing every space:
+```cpp
+// O(n²): each erase shifts everything after i
+for (int i = 0; i < (int)s.size(); )
+    if (s[i] == ' ') s.erase(i, 1); else i++;
+
+// O(n): remove moves the kept characters forward once, then erase cuts off the tail
+s.erase(remove(s.begin(), s.end(), ' '), s.end());   // remove is in <algorithm>
+
+// O(n), C++20: the same thing in one call
+erase(s, ' ');
+```
+```
+s = "a b c d"   -> "abcd"   (all three versions)
+```
+
+- Measured on a 200,000-character string, half spaces: the loop took 160 ms, and `remove` + `erase` took 45 µs.
+- Building a new string with `+=` for each character you keep is also O(n).
 
 ---
 

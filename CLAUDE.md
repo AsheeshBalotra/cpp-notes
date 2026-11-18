@@ -10,15 +10,15 @@ Short revision notes for SDE 2 DSA interviews in C++. This folder is published o
 
 ## Files
 
-| File                | Covers                                                                                                                   |
-|---------------------|--------------------------------------------------------------------------------------------------------------------------|
-| `Notes_strings.md`  | ASCII and case bits, char arithmetic, `stoi`, `to_string`, `substr`, `find`, `erase`, case helpers, number bases         |
-| `Notes_bits.md`     | bit operators, precedence, single-bit operations, bit tricks, XOR, bitmask subsets, traps, binary                        |
-| `Notes_vectors.md`  | vectors and iterators: `rbegin` / `rend`, `swap` with references vs copies                                               |
-| `Notes_heap.md`     | `priority_queue`: what a heap is, complexity, syntax, top K, heap vs `set`, traps                                        |
-| `Notes_maps.md`     | `unordered_map` / `map`: key checks, cost of each operation, insert / erase, iterators, `map`-only sorted keys           |
-| `Notes_math.md`     | modulo: negative remainders, `%` formulas for DSA                                                                        |
-| `CplusNotes.md`     | longer notes in 25 sections: C++ basics, binary search, trees, DP, slow/fast pointers, sorting, heap extras, BFS, graphs |
+| File               | Covers                                                                                                                    |
+|--------------------|---------------------------------------------------------------------------------------------------------------------------|
+| `Notes_strings.md` | ASCII and case bits, char arithmetic, `stoi`, `to_string`, `substr`, `find`, `erase`, case helpers, number bases          |
+| `Notes_bits.md`    | bit operators, precedence, single-bit operations, bit tricks, XOR, bitmask subsets, traps, binary                         |
+| `Notes_vectors.md` | vectors and iterators: `rbegin` / `rend`, `swap` with references vs copies, iterator invalidation                         |
+| `Notes_heap.md`    | `priority_queue`: what a heap is, complexity (why building is O(n)), syntax, top K, heap vs `set`, traps                  |
+| `Notes_maps.md`    | `unordered_map` / `map`: key checks, cost of each operation, key types, insert / erase, iterators, `map`-only sorted keys |
+| `Notes_math.md`    | modulo: negative remainders, `%` formulas for DSA                                                                         |
+| `CplusNotes.md`    | longer notes in 25 sections: C++ basics, binary search, trees, DP, slow/fast pointers, sorting, heap extras, BFS, graphs  |
 
 ## Folder rules
 

@@ -107,7 +107,38 @@ ref = 200;              // now val == 200 and *p == 200 too: same memory locatio
 - With `start < end`, the loop stops when one element is left (`start == end`) and never checks it.
 - Use `start < end` only for boundary searches like `lower_bound` ("first element `>=` target"). There the loop is meant to stop at `start == end`, because that position is the answer.
 
-> TODO: Expand — the `start < end` version: where `end` starts, why it moves with `end = mid` (not `mid - 1`), and one `lower_bound` example.
+The `start < end` version, written as `lower_bound` (the first index with `v[i] >= target`):
+```cpp
+int lowerBound(vector<int>& v, int target) {
+    int start = 0, end = v.size();               // end = n, not n - 1
+    while (start < end) {
+        int mid = start + (end - start) / 2;
+        if (v[mid] < target) start = mid + 1;    // mid is too small: the answer is after it
+        else end = mid;                          // mid may be the answer: keep it in range
+    }
+    return start;                                // start == end: the answer
+}
+```
+
+- **`end` starts at `n`:** when every element is smaller than the target, the answer is `n` (past the end, like `v.end()`). Starting at `n - 1` would make that answer impossible to return.
+- **`end = mid`, not `mid - 1`:** `v[mid] >= target`, so `mid` itself may be the first such index. `mid - 1` would skip it.
+- **`start < end`:** the range `[start, end]` always holds the answer. When one position is left, that position is the answer, so there is nothing to check.
+- **Trap:** `while (start <= end)` with `end = mid` loops forever: when `start == end`, `mid` equals both, and `end = mid` changes nothing.
+- `mid` is always less than `end`, so `v[mid]` never reads past the array, even though `end` starts at `n`.
+
+Dry run on `{10, 20, 20, 30}`, target 20:
+```
+start  end  mid  v[mid]
+0      4    2    20       >= 20: end = 2
+0      2    1    20       >= 20: end = 1
+0      1    0    10       <  20: start = 1
+1      1                  start == end: answer 1 (the first 20)
+```
+```
+target 25   -> 3     (the first element >= 25 is 30)
+target 40   -> 4     (all smaller: n)
+target 5    -> 0
+```
 
 **Middle:** `mid = start + (end - start) / 2`, not `(start + end) / 2`.
 - `start + end` can overflow when both are near `INT_MAX`. `end - start` is at most the array size, so it cannot.
@@ -509,6 +540,7 @@ Common bugs:
 
 - `lower_bound(target)`: the first element `>= target`.
 - `upper_bound(target)`: the first element `> target` (strictly greater, so an exact match is excluded).
+- **Trap:** `lower_bound` does not search for the target. When the target is missing, it points at the next bigger element, not at `end()`. It returns `end()` only when every element is smaller than the target. Before treating the result as found, check `it != v.end() && *it == target` (as an index: `i < n && v[i] == target`).
 
 Sorted `{10, 20, 30, 40}`:
 ```
@@ -522,10 +554,26 @@ Two forms:
 - Member functions on `set`, `map` and `multiset`: O(log n), using the tree structure directly.
 - Free functions from `<algorithm>` on a sorted `vector` or array: `lower_bound(v.begin(), v.end(), x)`, an O(log n) binary search. On an unsorted range they give a silently **wrong** answer, not a crash, so always make sure the range is sorted first.
 
-> TODO: Expand — what the free function `lower_bound(s.begin(), s.end(), x)` costs on a `set`, compared with the member `s.lower_bound(x)`.
+- **Trap:** the free function `lower_bound(s.begin(), s.end(), x)` on a `set` (or `map`, `multiset`) compiles and gives the right answer, but costs O(n). It makes only O(log n) comparisons, but a `set` iterator moves one step at a time, so jumping to each middle walks the elements one by one. The member `s.lower_bound(x)` walks down the tree in O(log n). Measured on a `set` of 1,000,000 values, 200 searches took 959 ms with the free function and 23 µs with the member. The same O(n) walk happens with `distance(s.begin(), it)`.
 
 - Always check `it != s.end()` (or `!= v.end()`) before dereferencing. If the target is bigger than everything, both return `end()`.
 - **To remember:** `lower_bound` = the lower (left) boundary of where the target fits, so exact matches are included. `upper_bound` = the upper (right) boundary, the position just past all elements equal to the target, so exact matches are skipped.
+
+With duplicates, `lower_bound` lands on the first copy and `upper_bound` one past the last, so the copies are `[lower_bound, upper_bound)`. Sorted `{1, 2, 2, 2, 3}`, results as indexes:
+```
+lower_bound(2)                   -> 1     (the first 2)
+upper_bound(2)                   -> 4     (one past the last 2)
+upper_bound(2) - lower_bound(2)  -> 3     (how many 2s)
+lower_bound(9)                   -> 5     (bigger than everything: v.size())
+```
+
+**Index from the iterator:** subtracting `begin()` gives the 0-based index. The target may be missing, so check the index before reading it. 34 Find First and Last Position of Element in Sorted Array:
+```cpp
+int first = lower_bound(nums.begin(), nums.end(), target) - nums.begin();
+if (first == (int)nums.size() || nums[first] != target) return {-1, -1};   // target not in nums
+int last = upper_bound(nums.begin(), nums.end(), target) - nums.begin() - 1;
+return {first, last};
+```
 
 ---
 

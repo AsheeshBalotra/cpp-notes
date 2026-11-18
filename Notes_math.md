@@ -72,6 +72,20 @@ k = 60, r = 0    -> partner 0    ((60 - 0) % 60 = 0, not 60)
 
 - With 10⁹+7, also use the `(a - b)` formula above after every `-`, or the result can go negative.
 
-> TODO: Expand — why `long long` is enough for one `*` of two remainders below 10⁹+7, and when it is not.
+### Why `long long` is enough for one `*`
+
+Both remainders are below 10⁹+7, so their product is below about 1.0 × 10¹⁸. `long long` holds up to about 9.2 × 10¹⁸, so one product fits with room to spare. `int` holds only about 2.1 × 10⁹, so the product does not fit.
+
+The largest product, checked:
+```
+(10⁹+6) × (10⁹+6)   -> 1,000,000,012,000,000,036     (about 1.0 × 10¹⁸)
+LLONG_MAX           -> 9,223,372,036,854,775,807     (about 9.2 × 10¹⁸)
+```
+
+It is not enough when:
+- **You multiply three values before the `%`:** `a * b * c` can reach 10²⁷. Take `%` after each `*`: `(a * b % MOD) * c % MOD`.
+- **The values were never reduced:** `%` each one first, so it is below the modulus.
+- **The modulus is above about 3 × 10⁹:** the square of the largest remainder no longer fits. Use `__int128` for the product.
+- **Both values are `int`:** `long long x = a * b;` multiplies in `int` and overflows before the result is converted. Convert one side first: `(long long)a * b`.
 
 **Practice:** 1010 Pairs of Songs With Total Durations Divisible by 60, 974 Subarray Sums Divisible by K, 523 Continuous Subarray Sum.

@@ -61,7 +61,33 @@ Cost of each operation:
 - Use `unordered_map` by default for counting and lookups. Use `map` when you need the keys in order, the smallest or largest key, or the nearest key to a value.
 - `m.reserve(n)` (`unordered_map` only) makes room for `n` keys up front, so the table does not have to grow and move every key while you insert.
 
-> TODO: Expand — which key types each accepts (for example, can `pair<int,int>` be a key of both?).
+### Which key types work
+
+`map` needs to compare two keys with `<`. `unordered_map` needs a hash function for the key, `std::hash<Key>`, and `==`.
+
+| Key type                                 | `map`                              | `unordered_map`                  |
+|------------------------------------------|------------------------------------|----------------------------------|
+| `int`, `long long`, `char`, `string`     | works                              | works                            |
+| `pair<int, int>`, `tuple`, `vector<int>` | works: compares element by element | does not compile: no `std::hash` |
+| your own `struct`                        | needs `operator<`                  | needs a hash and `operator==`    |
+
+Two ways to use a `pair` key in an `unordered_map`:
+```cpp
+// 1. Write the hash yourself
+struct PairHash {
+    size_t operator()(const pair<int, int>& p) const {
+        return hash<long long>()(((long long)p.first << 32) | (unsigned int)p.second);
+    }
+};
+unordered_map<pair<int, int>, int, PairHash> seen;
+
+// 2. Turn the pair into one number, for example a grid cell
+long long key = (long long)r * cols + c;     // unique while 0 <= c < cols
+unordered_map<long long, int> seen2;
+```
+
+- Without `PairHash`, `unordered_map<pair<int, int>, int>` fails with an error about `std::hash<std::pair<int, int>>`.
+- If speed is not critical, `map<pair<int, int>, int>` works with no extra code, at O(log n) per operation.
 
 ---
 
