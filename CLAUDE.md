@@ -10,20 +10,21 @@ Short revision notes for SDE 2 DSA interviews in C++. This folder is published o
 
 ## Files
 
-| File               | Covers                                                                                                                    |
-|--------------------|---------------------------------------------------------------------------------------------------------------------------|
-| `Notes_strings.md` | ASCII and case bits, char arithmetic, `stoi`, `to_string`, `substr`, `find`, `erase`, case helpers, number bases          |
-| `Notes_bits.md`    | bit operators, precedence, single-bit operations, bit tricks, XOR, bitmask subsets, traps, binary                         |
-| `Notes_vectors.md` | vectors and iterators: `rbegin` / `rend`, `swap` with references vs copies, iterator invalidation                         |
-| `Notes_heap.md`    | `priority_queue`: what a heap is, complexity (why building is O(n)), syntax, top K, heap vs `set`, traps                  |
-| `Notes_maps.md`    | `unordered_map` / `map`: key checks, cost of each operation, key types, insert / erase, iterators, `map`-only sorted keys |
-| `Notes_math.md`    | modulo: negative remainders, `%` formulas for DSA                                                                         |
-| `CplusNotes.md`    | longer notes in 25 sections: C++ basics, binary search, trees, DP, slow/fast pointers, sorting, heap extras, BFS, graphs  |
+| File                  | Covers                                                                                                                    |
+|-----------------------|---------------------------------------------------------------------------------------------------------------------------|
+| `Notes_strings.md`    | ASCII and case bits, char arithmetic, `stoi`, `to_string`, `substr`, `find`, `erase`, case helpers, number bases          |
+| `Notes_bits.md`       | bit operators, precedence, single-bit operations, bit tricks, XOR, bitmask subsets, traps, binary                         |
+| `Notes_vectors.md`    | vectors and iterators: `rbegin` / `rend`, `swap` with references vs copies, iterator invalidation                         |
+| `Notes_heap.md`       | `priority_queue`: what a heap is, complexity (why building is O(n)), syntax, top K, heap vs `set`, traps                  |
+| `Notes_maps.md`       | `unordered_map` / `map`: key checks, cost of each operation, key types, insert / erase, iterators, `map`-only sorted keys |
+| `Notes_containers.md` | `push` vs `insert`: which method each container has (stack, queue, deque, list, set), costs, traps                        |
+| `Notes_math.md`       | modulo: negative remainders, `%` formulas for DSA, overflow and `long long` (`1LL`)                                       |
+| `CplusNotes.md`       | longer notes in 25 sections: C++ basics, binary search, trees, DP, slow/fast pointers, sorting, heap extras, BFS, graphs  |
 
 ## Folder rules
 
 - **Traps:** `Notes_bits.md` and `Notes_heap.md` keep a Traps section as the only place for warnings. The other files put traps inline.
 - **`README.md`:** the landing page for GitHub readers. Keep its file list and its topic-to-section table for `CplusNotes.md` in step with this folder.
-- **Links into this folder:** `../DSA/Array-Strings/My_DSA_Mistakes.md` links to sections here by number, and `../DSA/README.md` maps topics to the section numbers of `CplusNotes.md`. Keep those numbers and section names stable, or update the links.
+- **Links into this folder:** the files in `../DSA/Array-Strings/` (`My_DSA_Mistake_Bank.md`, `DSA_Techniques.md`, `DSA_Approach_Framework.md`) link to sections here by number or name. `../DSA/README.md` maps topics to the section numbers of `CplusNotes.md`. Keep those numbers and section names stable, or update the links.
 - **Checklist:** the problem checklist lives in the DSA repo, at `../DSA/Array-Strings/Checklist_String_Array.md`.
 - **Scratch files:** `code.cpp` and `out.file` are the user's scratch files. Do not edit them.

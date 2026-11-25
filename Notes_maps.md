@@ -6,6 +6,17 @@ Headers `<unordered_map>` and `<map>`. Sections 1, 3 and 4 work the same for bot
 
 **`m[key]`:** returns the value stored for `key`. If the key is missing, it first **inserts** it with a default value (`0` for `int`) and returns that.
 
+The default depends on the value type:
+```
+unordered_map<char, int>          -> 0
+unordered_map<char, double>       -> 0.0
+unordered_map<char, bool>         -> false
+unordered_map<char, string>       -> ""  (empty string)
+unordered_map<int, vector<int>>   -> {}  (empty vector, so m[k].push_back(x) works on a new key)
+```
+
+- `[]` returns a reference, so `m[key] = v` and `m[key]++` change the stored value.
+
 So `if (m[key])` is a broken existence check, in two ways:
 - **A real value of 0 counts as "not found",** because `0` is false. For example, a key stored at index 0.
 - **A missing key gets inserted.** Every failed check quietly adds a fake entry with value 0. Later code treats it as real (`m[key]++` turns the fake 0 into 1), and the junk entries cost memory and time.
@@ -125,6 +136,10 @@ m.size();                // number of keys
 m.empty();               // true if there are no keys
 m.clear();               // removes every key
 ```
+
+- `size()` is the number of keys, so a key counts once however large its value is: after `m['a']++` twice and `m['b']++`, `m.size()` is 2.
+- Setting a value to 0 does not remove the key: `m['a'] = 0` leaves `size()` unchanged. Only `erase` lowers it.
+- Reading a missing key with `m[key]` inserts it and raises `size()` by 1 (section 1).
 
 - **Trap:** `m[key]` does not compile on a `const` map (for example a `const map<int,int>&` parameter), because it may insert. Use `find` or `at`.
 - **Trap:** `m.erase(m.find(key))` when `key` is missing erases `m.end()`, which is undefined. Erase by key (`m.erase(key)`), or check `!= m.end()` first.

@@ -4,15 +4,16 @@ Revision notes on C++ and the STL for data structures and algorithms interviews.
 
 ## Files
 
-| File                                   | Covers                                                                                                  |
-|----------------------------------------|---------------------------------------------------------------------------------------------------------|
-| [`CplusNotes.md`](CplusNotes.md)       | 25 longer sections: C++ basics, iterators, binary search, trees, DP, sorting, heaps, BFS, graphs        |
-| [`Notes_strings.md`](Notes_strings.md) | ASCII and `char` arithmetic, `stoi`, `to_string`, `substr`, `find`, `erase`, case helpers, number bases |
-| [`Notes_bits.md`](Notes_bits.md)       | bit operators, precedence, single-bit operations, tricks, XOR problems, bitmask subsets, binary         |
-| [`Notes_vectors.md`](Notes_vectors.md) | reverse iterators (`rbegin` / `rend`), `swap` with references vs copies, iterator invalidation          |
-| [`Notes_maps.md`](Notes_maps.md)       | `unordered_map` and `map`: key checks, cost, key types, insert / erase, iterators, sorted keys          |
-| [`Notes_heap.md`](Notes_heap.md)       | `priority_queue`: how a heap works, complexity, syntax, top K, heap vs `set`                            |
-| [`Notes_math.md`](Notes_math.md)       | modulo: negative remainders and `%` formulas                                                            |
+| File                                         | Covers                                                                                                  |
+|----------------------------------------------|---------------------------------------------------------------------------------------------------------|
+| [`CplusNotes.md`](CplusNotes.md)             | 25 longer sections: C++ basics, iterators, binary search, trees, DP, sorting, heaps, BFS, graphs        |
+| [`Notes_strings.md`](Notes_strings.md)       | ASCII and `char` arithmetic, `stoi`, `to_string`, `substr`, `find`, `erase`, case helpers, number bases |
+| [`Notes_bits.md`](Notes_bits.md)             | bit operators, precedence, single-bit operations, tricks, XOR problems, bitmask subsets, binary         |
+| [`Notes_vectors.md`](Notes_vectors.md)       | reverse iterators (`rbegin` / `rend`), `swap` with references vs copies, iterator invalidation          |
+| [`Notes_maps.md`](Notes_maps.md)             | `unordered_map` and `map`: key checks, cost, key types, insert / erase, iterators, sorted keys          |
+| [`Notes_containers.md`](Notes_containers.md) | `push` vs `insert`: which method each container has, costs, traps                                       |
+| [`Notes_heap.md`](Notes_heap.md)             | `priority_queue`: how a heap works, complexity, syntax, top K, heap vs `set`                            |
+| [`Notes_math.md`](Notes_math.md)             | modulo: negative remainders, `%` formulas, overflow and `long long` (`1LL`)                             |
 
 ## `CplusNotes.md` by topic
 

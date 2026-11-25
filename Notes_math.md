@@ -86,6 +86,59 @@ It is not enough when:
 - **You multiply three values before the `%`:** `a * b * c` can reach 10²⁷. Take `%` after each `*`: `(a * b % MOD) * c % MOD`.
 - **The values were never reduced:** `%` each one first, so it is below the modulus.
 - **The modulus is above about 3 × 10⁹:** the square of the largest remainder no longer fits. Use `__int128` for the product.
-- **Both values are `int`:** `long long x = a * b;` multiplies in `int` and overflows before the result is converted. Convert one side first: `(long long)a * b`.
+- **Both values are `int`:** `long long x = a * b;` multiplies in `int` and overflows before the result is converted. Convert one side first: `(long long)a * b`, or put `1LL` in front: `1LL * a * b` (see section 2).
 
 **Practice:** 1010 Pairs of Songs With Total Durations Divisible by 60, 974 Subarray Sums Divisible by K, 523 Continuous Subarray Sum.
+
+---
+
+## 2. Overflow and `long long`
+
+An `int` is 4 bytes (32 bits) and holds up to 2³¹ - 1. Past that it overflows, which is undefined behaviour for a signed type. When a sum or a product can pass that, do the arithmetic in `long long`.
+
+A signed type of `b` bits goes from -2^(b-1) to 2^(b-1) - 1, because one bit is the sign. The `unsigned` version of a type doubles the positive range (x2), because that bit holds a value instead.
+
+Limits, from `<climits>`:
+```
+INT_MAX      =  2³¹ - 1   ->   2,147,483,647
+INT_MIN      = -2³¹       ->  -2,147,483,648
+LLONG_MAX    =  2⁶³ - 1   ->   9,223,372,036,854,775,807
+LLONG_MIN    = -2⁶³       ->  -9,223,372,036,854,775,808
+```
+
+- No standard signed type is bigger than `long long`. `__int128` (GCC and clang only, up to 2¹²⁷ - 1) is the next step. `cout << x` does not compile for it, so convert it to a string to print it.
+
+### The `LL` suffix
+
+**Suffix:** letters written after a number that set its type. A plain `1` is an `int`, so `1LL` is how you write a `long long`.
+
+Type of each literal:
+```
+1       -> int                  (4 bytes)
+1LL     -> long long            (8 bytes)
+1ULL    -> unsigned long long   (8 bytes)
+```
+
+- `ll` and `LL` mean the same, so `1ll` and `1LL` are identical to the compiler. Mixed case (`1lL`, `1Ll`) does not compile.
+- **Prefer `LL`.** A lowercase `l` looks like `1` in many fonts, so `1ll` can read as `11`.
+
+### One `long long` operand makes the product `long long`
+
+Each `*` looks only at its own two operands. If one of them is `long long`, the other is converted to `long long` and the multiplication runs in `long long`. The type of the variable that stores the result does not change how the multiplication runs.
+
+`*` goes left to right, so the `1LL` must come before any `int * int` part. With `int a = 100000, b = 100000` (the true product is 10¹⁰):
+```cpp
+long long x = 1LL * a * b;        // 10000000000   (1LL * a) * b, both in long long
+long long y = a * (1LL * b);      // 10000000000
+long long z = a * b * 1LL;        // 1410065408    (a * b) runs in int and overflows first
+long long w = a * b;              // 1410065408    same overflow
+long long v = (long long)a * b;   // 10000000000   a cast works too
+```
+
+- The wrong values are what typical compilers give. The standard leaves the result undefined.
+- The same idea applies to shifts: `1LL << k`. See the "Overflow" trap in section 7 of `Notes_bits.md`.
+
+> [!WARNING]
+> `long long x = a * b;` still overflows when `a` and `b` are `int`. Put `1LL *` in front, or cast one side, before the multiplication.
+
+**Practice:** 7 Reverse Integer, 8 String to Integer (atoi).

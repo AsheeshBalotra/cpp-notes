@@ -64,6 +64,38 @@ Results and their types:
 | `int`       | 4 bytes | about ±2.1 billion |
 | `long long` | 8 bytes | about ±9.2 × 10¹⁸  |
 
+### Counting upper and lower case letters in one array
+
+`'A'` to `'Z'` is 65 to 90 and `'a'` to `'z'` is 97 to 122, so one array indexed by `c - 'A'` covers both cases. The 6 symbols between them (`[ \ ] ^ _` and a backtick) take indexes 26 to 31, which stay unused.
+
+Index of each end of the range:
+```
+char   ASCII   c - 'A'
+'A'    65      0
+'Z'    90      25
+'['    91      26     junk starts: [ \ ] ^ _ `
+'`'    96      31     junk ends
+'a'    97      32
+'z'    122     57
+```
+
+So `need[58]` is enough, with indexes 0 to 57 and 26 to 31 never used:
+```cpp
+vector<int> count(58, 0);              // index = c - 'A'
+for (char c : t) count[c - 'A']++;     // "aAbB": count[0], count[1], count[32], count[33] are each 1
+```
+
+Three sizes, all O(1) space:
+```
+count[128]   index = c                           no arithmetic, 512 bytes
+count[58]    index = c - 'A'                     6 unused slots, 232 bytes
+count[52]    index = c >= 'a' ? c - 'a' + 26 : c - 'A'     no unused slots, but a branch on every access
+```
+
+- Use 128 by default. Use 58 when asked to shrink it: one subtraction and no branch. Lowercase only: `count[26]` with `c - 'a'`.
+- **Trap:** `c - 'A'` is only valid for letters. A digit or a space gives a negative index (`'0' - 'A'` is -17, `' ' - 'A'` is -33), which is undefined behaviour. Use 128 when the input can hold other characters.
+- Used in 76 Minimum Window Substring (the counts of `t` and of the window).
+
 ---
 
 ## 2. `stoi` (string to int)

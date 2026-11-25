@@ -607,6 +607,39 @@ sort(dist.begin(), dist.end(), [](const pair<int,int> &a, const pair<int,int> &b
 
 **General rule:** every custom comparator passed to `sort`, `priority_queue`, `set` or `map` must use strict `<` (or `>` for descending), never `<=` or `>=`.
 
+### Sorting a `vector<vector<int>>` (intervals)
+
+Each element is a `vector<int>`, so a comparator takes two `vector<int>`, not two `int`.
+
+The stock comparators, both comparing **lexicographically** (the first values, and the second values only when the first are equal):
+```cpp
+sort(v.begin(), v.end());                 // ascending by [0], then by [1]
+sort(v.begin(), v.end(), greater<>());    // descending by [0], then by [1]
+```
+
+**Trap:** `greater<int>` is wrong twice. Without `()` it is a type, not an object, so it does not compile. With `()` it still fails, because it compares `int`, not `vector<int>`. Write `greater<>()`.
+
+Start ascending and end descending on equal starts has no stock comparator, so write a lambda:
+```cpp
+auto cmp = [](const vector<int>& a, const vector<int>& b) {
+    if (a[0] != b[0]) return a[0] < b[0];
+    return a[1] > b[1];                   // same start: the longer interval first
+};
+sort(intervals.begin(), intervals.end(), cmp);
+```
+
+Result on `{1,3} {2,4} {1,5} {2,2} {1,4}`:
+```
+sort(v.begin(), v.end())               -> [1,3] [1,4] [1,5] [2,2] [2,4]
+sort(v.begin(), v.end(), greater<>())  -> [2,4] [2,2] [1,5] [1,4] [1,3]
+cmp above                              -> [1,5] [1,4] [1,3] [2,4] [2,2]
+```
+
+- **Trap:** a lambda stored in `auto cmp` is a statement, so it needs a `;` after the closing `}`. Without it: `expected ';' at end of declaration`.
+- **Trap:** do not drop the `&` in the parameters. Without it, every comparison copies two whole vectors.
+- **Use `const` references:** `sort` accepts non-const ones, but `lower_bound` passes the search value as `const`, so `vector<int>& a` fails there with `The comparator has to be callable`.
+- **One-line alternative** (needs `<tuple>`): `[](auto& a, auto& b) { return tie(a[0], b[1]) < tie(b[0], a[1]); }`. Swapping `a[1]` and `b[1]` reverses that field. It is harder to read, so write the explicit version in an interview.
+
 ---
 
 ## 22. Priority queue / heap: concepts and extras
